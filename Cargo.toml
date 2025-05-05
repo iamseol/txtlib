@@ -1,0 +1,13 @@
+[package]
+name = "txtlib"
+description = "txtlib is a library for text file-based command line tools."
+version = "0.1.0"
+edition = "2024"
+authors = ["Seol SO <hi@iamseol.com>"]
+license = "MIT"
+repository = "https://github.com/iamseol/txtlib"
+documentation = "https://docs.rs/txtlib/latest/txtlib"
+homepage = "https://github.com/iamseol/txtlib"
+keywords = ["cli", "txt"]
+categories = ["command-line-utilities"]
+readme = "README.md"
