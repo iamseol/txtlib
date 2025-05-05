@@ -1,5 +1,7 @@
-pub mod txterror;
-pub mod util;
+mod txterror;
+mod util;
+pub use txterror::*;
+pub use util::*;
 
 mod txtlib;
-pub use txtlib::TxtLib;
+pub use txtlib::*;
