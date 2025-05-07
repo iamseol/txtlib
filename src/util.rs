@@ -2,7 +2,7 @@ use crate::txterror::{EmptyTxtResult, TxtError, TxtResult};
 use std::{
     env,
     fs::{self, DirEntry, File},
-    io::Read,
+    io::{Read, Write},
     path::PathBuf,
 };
 
@@ -26,15 +26,6 @@ pub fn create_new_file(file_path: &PathBuf) -> TxtResult<File> {
         .map_err(|e| TxtError::FailedCreatingFile(e, file_path.to_path_buf()))
 }
 
-pub fn delete_folder(folder_path: &PathBuf) -> EmptyTxtResult {
-    fs::remove_dir_all(folder_path)
-        .map_err(|e| TxtError::FailedDeletingFolder(e, folder_path.to_path_buf()))
-}
-
-pub fn delete_file(file_path: &PathBuf) -> EmptyTxtResult {
-    fs::remove_file(file_path).map_err(|e| TxtError::FailedDeletingFile(e, file_path.to_path_buf()))
-}
-
 pub fn create_clean_folder(folder_path: &PathBuf) -> EmptyTxtResult {
     if folder_path.exists() && folder_path.is_dir() {
         delete_folder(folder_path)?
@@ -49,6 +40,43 @@ pub fn create_clean_file(file_path: &PathBuf) -> TxtResult<File> {
     }
 
     create_new_file(file_path)
+}
+
+pub fn write_new_file(file_path: &PathBuf, content: String) -> EmptyTxtResult {
+    create_clean_file(file_path)?
+        .write_all(content.as_bytes())
+        .map_err(|e| TxtError::FailedWritingFileFromPath(e, file_path.to_path_buf()))
+}
+
+pub fn write_file(mut selected_file: File, content: String) -> EmptyTxtResult {
+    selected_file
+        .write_all(content.as_bytes())
+        .map_err(|e| TxtError::FailedWritingFile(e, selected_file))
+}
+
+pub fn get_file_stem(file_path: &PathBuf) -> TxtResult<&str> {
+    Ok(file_path
+        .file_stem()
+        .ok_or(TxtError::FailedGettingFileName(file_path.to_path_buf()))?
+        .to_str()
+        .ok_or(TxtError::FailedGettingFileName(file_path.to_path_buf()))?)
+}
+
+pub fn get_whole_file_name(file_path: &PathBuf) -> TxtResult<&str> {
+    Ok(file_path
+        .file_name()
+        .ok_or(TxtError::FailedGettingFileName(file_path.to_path_buf()))?
+        .to_str()
+        .ok_or(TxtError::FailedGettingFileName(file_path.to_path_buf()))?)
+}
+
+pub fn delete_folder(folder_path: &PathBuf) -> EmptyTxtResult {
+    fs::remove_dir_all(folder_path)
+        .map_err(|e| TxtError::FailedDeletingFolder(e, folder_path.to_path_buf()))
+}
+
+pub fn delete_file(file_path: &PathBuf) -> EmptyTxtResult {
+    fs::remove_file(file_path).map_err(|e| TxtError::FailedDeletingFile(e, file_path.to_path_buf()))
 }
 
 pub fn get_entries(folder_path: &PathBuf) -> TxtResult<Vec<DirEntry>> {

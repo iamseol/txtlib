@@ -1,6 +1,7 @@
 mod txterror;
-mod util;
 pub use txterror::*;
+
+mod util;
 pub use util::*;
 
 mod txtlib;
