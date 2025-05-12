@@ -42,13 +42,13 @@ pub fn create_clean_file(file_path: &PathBuf) -> TxtResult<File> {
     create_new_file(file_path)
 }
 
-pub fn write_new_file(file_path: &PathBuf, content: String) -> EmptyTxtResult {
+pub fn write_new_file(file_path: &PathBuf, content: &str) -> EmptyTxtResult {
     create_clean_file(file_path)?
         .write_all(content.as_bytes())
         .map_err(|e| TxtError::FailedWritingFileFromPath(e, file_path.to_path_buf()))
 }
 
-pub fn write_file(mut selected_file: File, content: String) -> EmptyTxtResult {
+pub fn write_file(mut selected_file: File, content: &str) -> EmptyTxtResult {
     selected_file
         .write_all(content.as_bytes())
         .map_err(|e| TxtError::FailedWritingFile(e, selected_file))

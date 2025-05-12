@@ -30,6 +30,9 @@ pub enum TxtError {
 
     // setting
     FailedGettingFileName(PathBuf),
+
+    // custom
+    Custom(String),
 }
 
 impl TxtError {
@@ -101,6 +104,10 @@ impl TxtError {
             // setting
             Self::FailedGettingFileName(file_path) => {
                 eprintln!("getting the file at {} is failed", file_path.display());
+            }
+
+            Self::Custom(message) => {
+                eprintln!("{message}");
             }
         };
 
