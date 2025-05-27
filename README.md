@@ -1,8 +1,8 @@
 # TXTLIB
 
-> txtlib is a library for text file-based command line tools.
+library for text file-based command line tools
 
-## Use
+## Install
 
 - `cargo add txtlib`
 
