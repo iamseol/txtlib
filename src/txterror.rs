@@ -8,6 +8,9 @@ pub enum TxtError {
     ArgNotFound(usize),
     FailedReadingCWD(Error),
 
+    // opening
+    FailedOpeningFile(Error, PathBuf),
+
     // not found
     FolderNotFound(PathBuf),
     FileNotFound(PathBuf),
@@ -52,6 +55,14 @@ impl TxtError {
             }
             Self::FileNotFound(file_path) => {
                 eprintln!("the file at {} is not found.", file_path.display());
+            }
+
+            // opening
+            Self::FailedOpeningFile(err, file_path) => {
+                eprintln!(
+                    "opening the file at {} is failed: {err}",
+                    file_path.display()
+                );
             }
 
             // reading

@@ -93,15 +93,25 @@ pub fn get_entries(folder_path: &PathBuf) -> TxtResult<Vec<DirEntry>> {
         .collect::<Result<Vec<DirEntry>, TxtError>>()
 }
 
-pub fn read_file(buf: &mut String, file_path: &PathBuf) -> EmptyTxtResult {
+pub fn open_file(file_path: &PathBuf) -> TxtResult<File> {
     if !file_path.exists() || file_path.is_dir() {
         return Err(TxtError::FileNotFound(file_path.to_path_buf()));
     }
 
-    File::open(file_path)
-        .map_err(|e| TxtError::FailedReadingFile(e, file_path.to_path_buf()))?
+    File::open(file_path).map_err(|e| TxtError::FailedOpeningFile(e, file_path.to_path_buf()))
+}
+
+pub fn read_file(buf: &mut String, file_path: &PathBuf) -> EmptyTxtResult {
+    open_file(file_path)?
         .read_to_string(buf)
         .map_err(|e| TxtError::FailedReadingFile(e, file_path.to_path_buf()))?;
+
+    Ok(())
+}
+
+pub fn read_from_file(buf: &mut String, file: &mut File) -> EmptyTxtResult {
+    file.read_to_string(buf)
+        .map_err(|e| TxtError::FailedReadingFile(e, PathBuf::new()))?;
 
     Ok(())
 }
